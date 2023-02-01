@@ -3,6 +3,7 @@ import time
 import unittest
 import body as body
 from selenium.webdriver import ActionChains
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.devtools.v106 import browser
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -23,12 +24,14 @@ def picker(value):
             element.click()
             break
 
-driver = webdriver.Chrome(executable_path="E:\DRIVER\chromedriver.exe")
+time.sleep(2)
+driver: WebDriver = webdriver.Chrome(executable_path="E:\DRIVER\chromedriver.exe")
 driver.get("https://sitsfl.stfc.in/")
 driver.maximize_window()
 time.sleep(2)
 
-element_to_hover_over = driver.find_element(By.XPATH, '//*[@id="body"]/app-root/app-header/header/section[2]/div/div/div[2]/p')
+element_to_hover_over = driver.find_element(By.XPATH,
+                                            '//*[@id="body"]/app-root/app-header/header/section[2]/div/div/div[2]/p')
 hover = ActionChains(driver).move_to_element(element_to_hover_over)
 hover.perform()
 time.sleep(5)
@@ -77,11 +80,11 @@ except:
     # driver.execute_script("window.scrollTo(0, 0)")
     time.sleep(2)
     driver.execute_script("window.scrollTo(0, 500)")
-    driver.find_element(By.XPATH, '//*[@id="mat-datepicker-0"]/mat-calendar-header/div/div/button[1]/span[1]').click()
+    driver.find_element(By.XPATH,"//*[@id='mat-datepicker-0']/mat-calendar-header/div/div/button[1]/span[1]").click()
     print("date picker arrow clicked")
     time.sleep(5)
 
-    # years = driver.find_elements(By.XPATH, "//div[@class='mat-calendar-body-cell-content mat-focus-indicator']")
+    # years = driver.find_elements(By.XPATH, "//div[@class='mat-calendar-body-cell-content mat-focus-indicator']")//*[@id="loan-dob"]
     # for yearelement in years:
     #     year = yearelement.text
     #     print(year)
@@ -101,7 +104,6 @@ except:
     #     if month=='MAY':
     #         monthelement.click()
     #         break
-
 
     # dates = driver.find_elements(By.XPATH, "//div[text()=' 21 ']")
     # for date in dates:
