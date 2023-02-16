@@ -1,4 +1,6 @@
-from gettext import find
+import os
+
+import pandas as pd
 
 from bs4 import BeautifulSoup
 import requests,openpyxl
@@ -38,6 +40,14 @@ except Expection as e:
     print("exception")
 
 excel.save("RD_InterestRate.xlsx")
+
+df2=pd.read_excel("E:/InterestRate.xlsx")
+print(df2)
+df1=pd.read_excel("E:/Python Project/Python/PycharmProject/pythonProject1/RD_InterestRate.xlsx")
+
+df1.equals(df2)
+comparison_values = df1.values == df2.values
+print (comparison_values)
 
 
 
