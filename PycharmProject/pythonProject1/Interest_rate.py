@@ -44,6 +44,7 @@ excel.save("RD_InterestRate.xlsx")
 df2=pd.read_excel("E:/InterestRate.xlsx")
 print(df2)
 df1=pd.read_excel("E:/Python Project/Python/PycharmProject/pythonProject1/RD_InterestRate.xlsx")
+print(df1)
 
 df1.equals(df2)
 comparison_values = df1.values == df2.values
