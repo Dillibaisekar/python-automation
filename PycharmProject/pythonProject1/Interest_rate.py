@@ -1,4 +1,5 @@
 import os
+from sys import path
 
 import pandas as pd
 
@@ -21,7 +22,7 @@ try:
     # print(soup)
     interest_rate=soup.find_all("tbody", class_="t_body")[0].find_all("tr")
     # print(interest_rate)
-    print('done')
+
 
     for trow in interest_rate:
         data = trow.find_all("td")
@@ -29,10 +30,10 @@ try:
         period=data[0].text
         rate = data[1].text
         maturityvalue = data[2].text
-        print(period)
-        print(rate)
-        print(maturityvalue)
-        print(period,rate,maturityvalue)
+        # print(period)
+        # print(rate)
+        # print(maturityvalue)
+        # print(period,rate,maturityvalue)
         # break
         sheet.append([period,rate,maturityvalue])
 
@@ -40,15 +41,24 @@ except Expection as e:
     print("exception")
 
 excel.save("RD_InterestRate.xlsx")
+cwdpath=os.getcwd()
+# print(cwdpath)
+# print(os.path.join(cwdpath,"InputFiles","InterestRate.xlsx"))
 
-df2=pd.read_excel("E:/InterestRate.xlsx")
+df2=pd.read_excel(os.path.join(cwdpath,"InputFiles","InterestRate.xlsx"))
+print()
+print("New Interest Rate Data:")
 print(df2)
-df1=pd.read_excel("E:/Python Project/Python/PycharmProject/pythonProject1/RD_InterestRate.xlsx")
+print()
+df1=pd.read_excel(os.path.join(cwdpath,"RD_InterestRate.xlsx"))
+print("Existing Interest in the Website:")
 print(df1)
 
 df1.equals(df2)
 comparison_values = df1.values == df2.values
-print (comparison_values)
+print(comparison_values)
+
+
 
 
 
