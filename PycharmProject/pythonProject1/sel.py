@@ -25,7 +25,7 @@ def picker(value):
             break
 
 time.sleep(2)
-driver: WebDriver = webdriver.Chrome(executable_path="E:\DRIVER\chromedriver.exe")
+driver.webdriver.chrome()
 driver.get("https://sitsfl.stfc.in/")
 driver.maximize_window()
 time.sleep(2)

@@ -1,21 +1,18 @@
-import parent_class
+from datetime import time
 
-
-
-import time
+from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 
-driver: WebDriver = webdriver.Chrome(executable_path="E:\DRIVER\chromedriver.exe")
+import parent_class
+
+driver=webdriver.Chrome()
 driver.get("https://sitsfl.stfc.in/")
 driver.maximize_window()
-time.sleep(3)
-element_to_hover_over=driver.find_element(By.XPATH,'//*[@id="body"]/app-root/app-header/header/section[2]/div/div/div[2]/p')
+element_to_hover_over=driver.find_element(By.XPATH,"//div[@class='head-link'][1]")
 hover = ActionChains(driver).move_to_element(element_to_hover_over)
 hover.perform()
-parent_class.getElementById("main_nav_tyre")
+parent_class.ele("main_nav_rd")
 print("Navin Done!")
 print("Hello")
-
+#

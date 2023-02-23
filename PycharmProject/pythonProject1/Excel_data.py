@@ -19,10 +19,9 @@ def picker(value):
             element.click()
             break
 
-driver = webdriver.Chrome()
+driver = webdriver.chrome()
 driver.get("https://sitsfl.stfc.in/")
 driver.maximize_window()
-print("sfl")
 def main():
     print("main")
     element_to_hover_over = driver.find_element(By.XPATH,
