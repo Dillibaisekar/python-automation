@@ -1,10 +1,18 @@
 import time
 
+
+import pytest
 import pandas as pd
+
+
 from selenium import webdriver
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+
+
+import parent_class
+
 
 # fun for find element by ID
 def ele(id):
@@ -20,12 +28,6 @@ def xpath(xpath):
 def link_text(text):
     elem = driver.find_element(By.LINK_TEXT, text)
     return elem
-
-
-def text(tex):
-    elem = driver.find_element_by_xpath("//span[contains(text(),\+tex)]")
-    return elem
-
 
 # fun for date picker
 def picker(value):
@@ -57,13 +59,11 @@ def mat_ins(value):
 
 
 def add_drop_down(value):
-    dropdown = Select(
-        driver.find_element(By.XPATH, "//select[@class='form__control ng-untouched ng-pristine ng-invalid']"))
+    dropdown = Select(driver.find_element(By.XPATH, "//select[@class='form__control ng-untouched ng-pristine ng-invalid']"))
     dropdown.select_by_value(value)
 
 
 dataSheet = pd.read_excel(r'E:\Python Project\Python\PycharmProject\pythonProject1\InputFiles\RD_DATA.xlsx')
-
 for ind in dataSheet.index:
     c = webdriver.ChromeOptions()
     c.add_argument("--incognito")
@@ -74,15 +74,15 @@ for ind in dataSheet.index:
     ActionChains(driver).move_to_element(element_hover).perform()
     time.sleep(3)
 
-
-
     otp1_data = dataSheet['OTP1'][ind]
+    print(otp1_data)
     otp2_data = dataSheet['OTP2'][ind]
+    print(otp2_data)
     otp3_data = dataSheet['OTP3'][ind]
     otp4_data = dataSheet['OTP4'][ind]
     otp5_data = dataSheet['OTP5'][ind]
     otp6_data = dataSheet['OTP6'][ind]
-    pan_data =  dataSheet['PAN'][ind]
+    pan_data = dataSheet['PAN'][ind]
     firstname_data = dataSheet['First_name'][ind]
     lastname_data = dataSheet['Last_name'][ind]
     mail_data = dataSheet['Mail'][ind]
@@ -114,7 +114,9 @@ for ind in dataSheet.index:
     nom_first_name_data = dataSheet['Nom_first_name'][ind]
     nom_last_name_data = dataSheet['Nom_last_name'][ind]
 
-    ele("main_nav_rd").click()
+    ele('main_nav_rd').click()
+
+    print('ele clicked')
     time.sleep(5)
     driver.execute_script("window.scrollTo(0,500)")
     mobile = ele('cus_mobile')
@@ -131,8 +133,10 @@ for ind in dataSheet.index:
     amount_data = dataSheet['Amount'][ind]
     amount.send_keys(str(amount_data))
     invest_now.click()
-#      Done with landing screen
-#      OTP screen
+    print("IV Clicked")
+    time.sleep(5)
+    #      Done with landing screen
+    #      OTP screen
     otp1 = ele('otpCode1')
     otp2 = ele('otpCode2')
     otp3 = ele('otpCode3')
@@ -147,8 +151,8 @@ for ind in dataSheet.index:
     otp5.send_keys(str(otp5_data))
     otp6.send_keys(str(otp6_data))
     otp_verify.click()
-#     PAN screen
-    if driver.current_url== 'https://www.shriramfinance.in/recurring-deposit-online/personal-information':
+    #     PAN screen
+    if driver.current_url == 'https://www.shriramfinance.in/recurring-deposit-online/personal-information':
         pan = xpath('//*[@id="pan2"]')
         pan.send_keys(str(pan_data))
         pan.click()
@@ -162,9 +166,10 @@ for ind in dataSheet.index:
         firstname.send_keys(str(firstname_data))
         lastname.send_keys(str(lastname_data))
         dobclick.click()
-        dobyear = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
+        dobyear = xpath(
+            "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
         dobyear.click()
-        #y=1999
+        # y=1999
         picker('1999')
         time.sleep(10)
         picker('MAY')
@@ -172,7 +177,7 @@ for ind in dataSheet.index:
         picker('21')
         mail = ele('email')
         mail.send_keys(str(mail_data))
-        #xpath for scheme selection
+        # xpath for scheme selection
         invest_edit = xpath("//i[@class='icon icon-edit'][1]")
         invest_edit.click()
         investamount2 = ele('name')
@@ -196,35 +201,35 @@ for ind in dataSheet.index:
         terms_cond.click()
         continue1 = xpath("(//button[@class='button button--yellow'])[1]")
         continue1.click()
-#         done with PAN screen
+    #         done with PAN screen
     if driver.current_url == "https://www.shriramfinance.in/recurring-deposit-online/address-information":
-    #    # CKYC screen
-       driver.execute_script("window.scrollTo(0,500)")
-       doc_type = ele('ckyc_failure_depositor_proof_type')
-       doc_type.click()
-       doc_proof_dropdown('RDAID')
-       doc_num = xpath("//input[@class='form__control ng-untouched ng-dirty ng-invalid']")
-       doc_num.send_keys(str(doc_num_data))
-       driver.execute_script("window.scrollTo(0,800)")
-       time.sleep(5)
-       proof_front = xpath('//*[@id="ckyc_failure_depositor_proof_front"]')
-       proof_front.send_keys(proof_front_data)
-       proof_back = xpath('//*[@id="ckyc_failure_depositor_proof_back"]')
-       proof_back.send_keys(str(proof_back_data))
-       continue2 = xpath("//button[@class='button button--yellow button--small']")
-       continue2.click()
-       address1 = ele('depositor_address_1')
-       address1.send_keys(str(address1_data))
-       address2 = ele('depositor_address_2')
-       address2.send_keys(str(address2_data))
-       depositor_pincode = ele('depositor_pincode')
-       depositor_pincode.send_keys(str(pincode_data))
-       depositor_pincode.click()
-       depositor_pincode.send_keys(Keys.ARROW_DOWN)
-       depositor_pincode.send_keys(Keys.ENTER)
-       upload_photo = xpath('//*[@id="depositor_photo"]')
-       upload_photo.send_keys(str(photo_upload_data))
-       continue2.click()
+        #    # CKYC screen
+        driver.execute_script("window.scrollTo(0,500)")
+        doc_type = ele('ckyc_failure_depositor_proof_type')
+        doc_type.click()
+        doc_proof_dropdown('RDAID')
+        doc_num = xpath("//input[@class='form__control ng-untouched ng-dirty ng-invalid']")
+        doc_num.send_keys(str(doc_num_data))
+        driver.execute_script("window.scrollTo(0,800)")
+        time.sleep(5)
+        proof_front = xpath('//*[@id="ckyc_failure_depositor_proof_front"]')
+        proof_front.send_keys(proof_front_data)
+        proof_back = xpath('//*[@id="ckyc_failure_depositor_proof_back"]')
+        proof_back.send_keys(str(proof_back_data))
+        continue2 = xpath("//button[@class='button button--yellow button--small']")
+        continue2.click()
+        address1 = ele('depositor_address_1')
+        address1.send_keys(str(address1_data))
+        address2 = ele('depositor_address_2')
+        address2.send_keys(str(address2_data))
+        depositor_pincode = ele('depositor_pincode')
+        depositor_pincode.send_keys(str(pincode_data))
+        depositor_pincode.click()
+        depositor_pincode.send_keys(Keys.ARROW_DOWN)
+        depositor_pincode.send_keys(Keys.ENTER)
+        upload_photo = xpath('//*[@id="depositor_photo"]')
+        upload_photo.send_keys(str(photo_upload_data))
+        continue2.click()
     if driver.current_url == "https://www.shriramfinance.in/recurring-deposit-online/bank-information":
         driver.execute_script("window.scrollTo(0,200)")
         digital_payment = xpath("//span[@class='switch-handle']")
@@ -281,7 +286,8 @@ for ind in dataSheet.index:
         nom_last_name.send_keys(str(nom_last_name_data))
         nom_dob = xpath("//input[@formcontrolname='nominee_dob']")
         nom_dob.click()
-        nom_year = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
+        nom_year = xpath(
+            "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
         picker("1994")
         time.sleep(5)
         picker("OCT")
@@ -291,6 +297,8 @@ for ind in dataSheet.index:
         continue2.click()
         print("Lead created successfully")
         break
+
+
 
 # c = webdriver.ChromeOptions()
 # c.add_argument("--incognito")

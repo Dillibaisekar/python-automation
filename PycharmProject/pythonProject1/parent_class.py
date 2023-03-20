@@ -24,10 +24,14 @@
 # # loan_amount = driver.find_element(By.ID,"cus_loanAmount")
 # # pincode = driver.find_element(By.ID,"cus_pincode2")
 # # form_submit = driver.find_element(By.ID,"pf-apply-btn1")
-#
-# def ele(id):
-#     elem = driver.find_element(By.ID,id)
-#     return elem
+from selenium.webdriver.chrome import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+def ele1(id):
+    elem = driver.find_element(By.ID, id)
+    return elem
+
 #
 #
 # def picker(value):
@@ -67,22 +71,22 @@
 # # otp4.send_keys(otp4val)
 # # otp5.send_keys(otp5val)
 # # otp6.send_keys(otp6val)
-from RD import ele, xpath
 
-mobile = ele('cus_mobile')
-pincode = ele('cus_pincode')
-amount = ele('cus_investment_amount')
-invest_now = ele('pf-apply-btn')
-otp1 = ele('otpCode1')
-otp2 = ele('otpCode2')
-otp3 = ele('otpCode3')
-otp4 = ele('otpCode4')
-otp5 = ele('otpCode5')
-otp6 = ele('otpCode6')
-otp = ele('otpVerifybtn')
-
-firstname = ele('firstName')
-lastname = ele('lastName')
-dobclick = xpath('//*[@id="depositer-details"]/form/div/div[2]/div/div[3]/div[1]/div[6]/div/input')
-dobyear = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
-email = ele('email')
+#
+# mobile = ele('cus_mobile')
+# pincode = ele('cus_pincode')
+# amount = ele('cus_investment_amount')
+# invest_now = ele('pf-apply-btn')
+# otp1 = ele('otpCode1')
+# otp2 = ele('otpCode2')
+# otp3 = ele('otpCode3')
+# otp4 = ele('otpCode4')
+# otp5 = ele('otpCode5')
+# otp6 = ele('otpCode6')
+# otp = ele('otpVerifybtn')
+#
+# firstname = ele('firstName')
+# lastname = ele('lastName')
+# dobclick = xpath('//*[@id="depositer-details"]/form/div/div[2]/div/div[3]/div[1]/div[6]/div/input')
+# dobyear = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
+# email = ele('email')
