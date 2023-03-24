@@ -13,11 +13,6 @@ excel= pd.read_excel(r'E:\Python Project\Python\PycharmProject\pythonProject1\In
 f = open('articles_write', 'w')
 count=0
 for ind in excel.index:
-
-
-
-
-
     article_url= excel['URLs'][ind]
     driver.get(article_url)
     f.writelines('Entered URL is :\n')
@@ -39,7 +34,11 @@ for ind in excel.index:
 
             f.writelines(article_link + '\n')
             print(article_link)
+        else:
+            print(article_link)
         count=count+1
+
+
 
 
 
