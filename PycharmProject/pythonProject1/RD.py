@@ -215,6 +215,9 @@ for ind in dataSheet.index:
         make_payment = xpath("(//button[@class='svelte-13mgn3i'])[2]")
         make_payment.click()
         time.sleep(5)
+        sucess_click = xpath("//button[@class='success']")
+        sucess_click.click()
+        time.sleep(5)
 
     #         done with PAN screen
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/address-information":
@@ -231,7 +234,7 @@ for ind in dataSheet.index:
         proof_front.send_keys(proof_front_data)
         proof_back = xpath('//*[@id="ckyc_failure_depositor_proof_back"]')
         proof_back.send_keys(str(proof_back_data))
-        continue2 = xpath("//button[@class='button button--yellow']")
+        continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
         address1 = ele('depositor_address_1')
         address1.send_keys(str(address1_data))
@@ -266,6 +269,7 @@ for ind in dataSheet.index:
         cheque_upload.send_keys(str(cheque_upload_data))
         continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
+        time.sleep(10)
     # Additional details screen
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/additional-details":
         maturity_instruction = xpath("//select[@formcontrolname='inv_maturity_instruction_type']")
