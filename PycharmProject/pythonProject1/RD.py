@@ -1,3 +1,4 @@
+import os.path
 import time
 
 import driver as driver
@@ -10,7 +11,6 @@ from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
-
 
 def Click(element):
     wait = WebDriverWait(driver, 10)
@@ -26,23 +26,14 @@ def sendkeys(value, xpath, exceldata):
 
 # fun for find element by ID
 def ele(x):
-    # wait = WebDriverWait(driver, 10)
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, x)))
     elem = driver.find_element(By.ID, x)
-    # a = wait.until(EC.visibility_of(elem))
     return elem
 
-# rd = ele('main_nav_rd')
 def xpath(xpath):
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
     elem = driver.find_element(By.XPATH, xpath)
     return elem
-
-
-def link_text(text):
-    elem = driver.find_element(By.LINK_TEXT, text)
-    return elem
-
 
 # fun for date picker
 def picker(value):
@@ -53,12 +44,10 @@ def picker(value):
             element.click()
             break
 
-
 def doc_proof_dropdown(value):
     dropdown = Select(driver.find_element(By.ID, 'ckyc_failure_depositor_proof_type'))
     dropdown.select_by_value(value)
     return dropdown
-
 
 def account_type(value):
     dropdown = Select(
@@ -66,11 +55,9 @@ def account_type(value):
     dropdown.select_by_value(value)
     return dropdown
 
-
 def mat_ins(value):
     dropdown = Select(driver.find_element(By.XPATH, "//select[@formcontrolname='inv_maturity_instruction_type']"))
     dropdown.select_by_value(value)
-
 
 def add_drop_down(value, elem):
     dropdown = Select(elem)
@@ -125,26 +112,14 @@ for ind in dataSheet.index:
     nom_ad1_data = dataSheet['Nom_ad1'][ind]
     nom_ad2_data = dataSheet['Nom_ad2'][ind]
     nom_pincode_data = dataSheet['Nom_pincode'][ind]
-    print(nom_pincode_data)
-
     rd = ele('main_nav_rd')
     rd.click()
     mobile = ele('cus_mobile')
-    # try:
-    #     mobile = driver.find_element(By.ID, 'cus_mobile')
-    #     WebDriverWait(driver, 10).until(EC.visibility_of(mobile))
-    #     # mobile = ele('cus_mobile')
-    #     #driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-    #     sendKeys(mobile, '9488712093')
-    # except NoSuchElementException:
-    #     element = None
     pincode = ele('cus_pincode')
     amount = ele('cus_investment_amount')
     invest_now = ele('pf-apply-btn')
-
     mobile_data = dataSheet['Mobile_Number'][ind]
     mobile.send_keys(str(mobile_data))
-
     pin_data = dataSheet['Pincode'][ind]
     # mobile.send_keys(str(mobile_data))
     pincode.send_keys(str(pin_data))
@@ -167,7 +142,7 @@ for ind in dataSheet.index:
     otp5.send_keys(str(otp5_data))
     otp6.send_keys(str(otp6_data))
     otp_verify.click()
-    time.sleep(5)
+    time.sleep(10)
     if driver.current_url == 'https://sitsfl.stfc.in/recurring-deposit-online/personal-information':
         pan = xpath('//*[@id="pan2"]')
         panvalue=pan.get_attribute("value")
@@ -187,7 +162,6 @@ for ind in dataSheet.index:
             dobyear = xpath(
                 "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
             dobyear.click()
-            # y=1999
             picker('2003')
             picker('MAY')
             picker('21')
@@ -212,12 +186,8 @@ for ind in dataSheet.index:
         # installment_date = xpath("(//i[@class='icon icon-edit'])[2]")
         # installment_date.click()
         # picker('31')
-        #
-        # time.sleep(2)
-        #
         # bg = xpath("//h2[text()='RD Investment Summary']")
         # bg.click()
-
         # terms_cond = xpath('//*[@id="depositer-details"]/form/div/div[3]/div[1]/div[4]/div/div[1]/div/div/label')
         # terms_cond.click()
         continue1 = xpath("(//button[@class='button button--yellow'])[1]")
@@ -232,8 +202,8 @@ for ind in dataSheet.index:
         make_payment.click()
         sucess_click = xpath("//button[@class='success']")
         sucess_click.click()
-
     #         done with PAN screen
+        time.sleep(15)
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/address-information":
         #    # CKYC screen
         doc_type = ele('ckyc_failure_depositor_proof_type')
@@ -245,11 +215,13 @@ for ind in dataSheet.index:
         proof_front = ele("ckyc_failure_depositor_proof_front")
         # proof_frontvalue=proof_front.get_attribute("value")
         # sendkeys(proof_frontvalue,proof_front,proof_front_data)
-        proof_front.send_keys(proof_front_data)
+        frontpath=os.path.abspath(proof_front_data)
+        proof_front.send_keys(frontpath)
         proof_back = ele("ckyc_failure_depositor_proof_back")
         # proof_backvalue=proof_back.get_attribute("value")
         # sendkeys(proof_backvalue,proof_back,proof_back_data)
-        proof_back.send_keys(str(proof_back_data))
+        backpath=os.path.abspath(proof_back_data)
+        proof_back.send_keys(str(backpath))
         continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
         address1 = ele('depositor_address_1')
@@ -265,11 +237,12 @@ for ind in dataSheet.index:
         depositor_pincode.send_keys(Keys.ARROW_DOWN)
         depositor_pincode.send_keys(Keys.ENTER)
         upload_photo = xpath('//*[@id="depositor_photo"]')
-        upload_photo.send_keys(str(photo_upload_data))
+        uploadpath=os.path.abspath((photo_upload_data))
+        upload_photo.send_keys(str(uploadpath))
         # upload_photovalue=upload_photo.get_attribute("value")
         # sendkeys(upload_photovalue,upload_photo,photo_upload_data)
         continue2.click()
-        time.sleep(30)
+        time.sleep(5)
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/bank-information":
         driver.execute_script("window.scrollTo(0,200)")
         digital_payment = xpath("//span[@class='switch-handle']")
@@ -278,11 +251,12 @@ for ind in dataSheet.index:
         account_numbervalue=account_number.get_attribute("value")
         sendkeys(account_numbervalue,account_number,acc_num_data)
         confirm_account_number = xpath("//input[@formcontrolname='bank_confirmAccountNumber']")
-        confirm_account_numbervalue = account_number.get_attribute("value")
+        confirm_account_numbervalue = confirm_account_number.get_attribute("value")
         sendkeys(confirm_account_numbervalue, confirm_account_number, con_acc_num_data)
         ifsc = xpath("//input[@formcontrolname='bank_IFSC']")
         ifscvalue=ifsc.get_attribute("value")
         sendkeys(ifscvalue,ifsc,ifsc_data)
+        ifsc.click()
         acc_name = xpath("//input[@formcontrolname='bank_personName']")
         acc_namevalue=acc_name.get_attribute("value")
         sendkeys(acc_namevalue,acc_name,acc_name_data)
@@ -290,10 +264,12 @@ for ind in dataSheet.index:
         acc_type.click()
         account_type('RDSA')
         cheque_upload = xpath("//input[@formcontrolname='bankOCR']")
-        cheque_upload.send_keys(str(cheque_upload_data))
+        chequepath=os.path.abspath(cheque_upload_data)
+        cheque_upload.send_keys(str(chequepath))
         continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
     # Additional details screen
+        time.sleep(5)
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/additional-details":
         maturity_instruction = xpath("//select[@formcontrolname='inv_maturity_instruction_type']")
         maturity_instruction.click()
@@ -313,61 +289,52 @@ for ind in dataSheet.index:
         fd_payout = xpath("//select[@formcontrolname='deposit_fd_payout_type']")
         fd_payout.click()
         add_drop_down("QTR", fd_payout)
-        print("success")
         #     Nominee details
         nom = xpath('(//input[@class="switch-input ng-untouched ng-pristine ng-valid"])[2]')
         nom_rel = xpath("//select[@formcontrolname='nominee_relationship']")
-        nominee = xpath("(//span[@class='switch-handle'])[2]")
+        nominee = xpath('(//span[@class="switch-label"])[2]')
         nominee.click()
-        nom_rel.click()
-        add_drop_down("FATHR", nom_rel)
-        # nom_title = xpath("//select[@formcontrolname='nominee_title']")
-        nom_fir_name = xpath("//input[@formcontrolname='nominee_firstName']")
-        nom_fir_namevalue=nom_fir_name.get_attribute("value")
-        sendkeys(nom_fir_namevalue,nom_fir_name,nom_first_name_data)
-        nom_last_name = xpath("//input[@formcontrolname='nominee_lastName']")
-        nom_last_namevalue=nom_last_name.get_attribute("va;ue")
-        sendkeys(nom_last_namevalue,nom_last_name,nom_last_name_data)
-        nom_dob = xpath("//input[@formcontrolname='nominee_dob']")
-        nom_year = xpath(
-            "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
-        nom_dobvalue=nom_dob.get_attribute("value")
-        if (nom_dobvalue == ""):
+        if nominee.is_selected():
+            continue
+        else:
+            nom_rel.click()
+            add_drop_down("FATHR", nom_rel)
+            # nom_title = xpath("//select[@formcontrolname='nominee_title']")
+            nom_fir_name = xpath("//input[@formcontrolname='nominee_firstName']")
+            nom_fir_namevalue = nom_fir_name.get_attribute("value")
+            sendkeys(nom_fir_namevalue, nom_fir_name, nom_first_name_data)
+            nom_last_name = xpath("//input[@formcontrolname='nominee_lastName']")
+            nom_last_namevalue = nom_last_name.get_attribute("value")
+            sendkeys(nom_last_namevalue, nom_last_name, nom_last_name_data)
+            nom_dob = xpath("//input[@formcontrolname='nominee_dob']")
             nom_dob.click()
-            nom_year = xpath ("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
-            nom_year.click()
-            picker("1994")
-            picker("OCT")
-            picker("13")
-        add_drop_down("FATHR", nom_rel)
-        # nom_title = xpath("//select[@formcontrolname='nominee_title']")
-        nom_fir_name = xpath("//input[@formcontrolname='nominee_firstName']")
-        nom_fir_namevalue=nom_fir_name.get_attribute("value")
-        sendkeys(nom_fir_namevalue,nom_fir_name,nom_first_name_data)
-        nom_last_name = xpath("//input[@formcontrolname='nominee_lastName']")
-        nom_last_namevalue=nom_last_name.get_attribute("value")
-        sendkeys(nom_last_namevalue,nom_last_name,nom_last_name_data)
-        nom_dob = xpath("//input[@formcontrolname='nominee_dob']")
-        nom_dob.click()
-        nom_year = xpath(
-            "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
-        picker("1994")
-        picker("OCT")
-        picker("13")
+            nom_year = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
+            nom_dobvalue = nom_dob.get_attribute("value")
+            if (nom_dobvalue == ""):
 
-        nom_ad1 = xpath("//input[@formcontrolname='nominee_address_1']")
-        nom_ad1value=nom_ad1.get_attribute("value")
-        nom_ad2 = xpath("//input[@formcontrolname='nominee_address_2']")
-        nom_ad2value=nom_ad2.get_attribute("value")
-        sendkeys(nom_ad2value,nom_ad2,nom_ad2_data)
-        nom_pincode = xpath("//input[@formcontrolname='nominee_address_pincode']")
-        nom_pincodevalue=nom_pincode.get_attribute("value")
-        sendkeys(nom_pincodevalue,nom_pincode,nom_pincode_data)
-        nom_pincode.click()
-        nom_pincode.send_keys(Keys.ARROW_DOWN)
-        nom_pincode.send_keys(Keys.ENTER)
+                nom_year = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
+                nom_year.click()
+                picker("1994")
+                picker("OCT")
+                picker("13")
+            add_drop_down("FATHR", nom_rel)
+            # nom_title = xpath("//select[@formcontrolname='nominee_title']")
+
+            nom_ad1 = xpath("//input[@formcontrolname='nominee_address_1']")
+            nom_ad1value = nom_ad1.get_attribute("value")
+            sendkeys(nom_ad1value,nom_ad1,nom_ad1_data)
+            nom_ad2 = xpath("//input[@formcontrolname='nominee_address_2']")
+            nom_ad2value = nom_ad2.get_attribute("value")
+            sendkeys(nom_ad2value, nom_ad2, nom_ad2_data)
+            nom_pincode = xpath("//input[@formcontrolname='nominee_address_pincode']")
+            nom_pincodevalue = nom_pincode.get_attribute("value")
+            sendkeys(nom_pincodevalue, nom_pincode, nom_pincode_data)
+            nom_pincode.click()
+            nom_pincode.send_keys(Keys.ARROW_DOWN)
+            nom_pincode.send_keys(Keys.ENTER)
         continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
-        time.sleep(20)
-        print("Lead created successfully")
+        time.sleep(15)
+        if driver.current_url=="https://sitsfl.stfc.in/recurring-deposit-online/rd-confirmation":
+            print("Lead created successfully")
         break
