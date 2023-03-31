@@ -1,6 +1,5 @@
 import os.path
 import time
-
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 from selenium import webdriver
@@ -43,22 +42,30 @@ def picker(value):
 
 def doc_proof_dropdown(value):
     dropdown = Select(driver.find_element(By.ID, 'ckyc_failure_depositor_proof_type'))
-    dropdown.select_by_value(value)
+    dropdownvalue = dropdown.first_selected_option.get_attribute("value")
+    if (dropdownvalue == ""):
+        dropdown.select_by_value(value)
     return dropdown
 
 def account_type(value):
-    dropdown = Select(
-        driver.find_element(By.XPATH, "(//select[@formcontrolname='bank_type'])[1]"))
-    dropdown.select_by_value(value)
+    dropdown = Select(driver.find_element(By.XPATH, "(//select[@formcontrolname='bank_type'])[1]"))
+    dropdownvalue = dropdown.first_selected_option.get_attribute("value")
+    if (dropdownvalue == ""):
+        dropdown.select_by_value(value)
     return dropdown
 
 def mat_ins(value):
     dropdown = Select(driver.find_element(By.XPATH, "//select[@formcontrolname='inv_maturity_instruction_type']"))
-    dropdown.select_by_value(value)
+    dropdownvalue = dropdown.first_selected_option.get_attribute("value")
+    if (dropdownvalue == ""):
+        dropdown.select_by_value(value)
 
 def add_drop_down(value, elem):
     dropdown = Select(elem)
-    dropdown.select_by_value(value)
+    dropdownvalue=dropdown.first_selected_option.get_attribute("value")
+    if(dropdownvalue == ""):
+        dropdown.select_by_value(value)
+
 
 dataSheet = pd.read_excel(r'InputFiles\rd_data.xlsx')
 for ind in dataSheet.index:
@@ -272,14 +279,16 @@ for ind in dataSheet.index:
         maturity_instruction.click()
         mat_ins("RDCFD")
         occupation = xpath("//select[@formcontrolname='inv_occupation_type']")
-        occupation.click()
         add_drop_down("PROFL", occupation)
         father_name = xpath("//input[@formcontrolname='father_name']")
         father_namevalue=father_name.get_attribute("value")
         sendkeys(father_namevalue,father_name,fathername_data)
         marital_status = xpath("//select[@formcontrolname='inv_marital_status']")
-        marital_status.click()
-        add_drop_down("RDUNM", marital_status)
+        marital_statusvalue=marital_status.get_attribute('disabled')
+        if (marital_statusvalue!='true' or marital_statusvalue==''):
+            marital_status.click()
+            add_drop_down("RDUNM", marital_status)
+
         fd_tenure = xpath("//select[@formcontrolname='deposit_fd_tenure_type']")
         fd_tenure.click()
         add_drop_down("36", fd_tenure)
@@ -287,13 +296,11 @@ for ind in dataSheet.index:
         fd_payout.click()
         add_drop_down("QTR", fd_payout)
         #     Nominee details
-        nom = xpath('(//input[@class="switch-input ng-untouched ng-pristine ng-valid"])[2]')
-        nom_rel = xpath("//select[@formcontrolname='nominee_relationship']")
-        nominee = xpath('(//span[@class="switch-label"])[2]')
-        nominee.click()
-        if nominee.is_selected():
-            continue
-        else:
+        nom = xpath('//input[@formcontrolname="is_nominee"]')
+        nomvalue=nom.get_attribute("checked")
+        print(nomvalue)
+        if nomvalue=='true':
+            nom_rel = xpath("//select[@formcontrolname='nominee_relationship']")
             nom_rel.click()
             add_drop_down("FATHR", nom_rel)
             # nom_title = xpath("//select[@formcontrolname='nominee_title']")
@@ -305,30 +312,33 @@ for ind in dataSheet.index:
             sendkeys(nom_last_namevalue, nom_last_name, nom_last_name_data)
             nom_dob = xpath("//input[@formcontrolname='nominee_dob']")
             nom_dob.click()
-            nom_year = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
+            nom_year = xpath(
+                "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']").click()
             nom_dobvalue = nom_dob.get_attribute("value")
             if (nom_dobvalue == ""):
-
-                nom_year = xpath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
+                nom_year = xpath(
+                    "//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")
                 nom_year.click()
                 picker("1994")
                 picker("OCT")
                 picker("13")
-            add_drop_down("FATHR", nom_rel)
-            # nom_title = xpath("//select[@formcontrolname='nominee_title']")
-
-            nom_ad1 = xpath("//input[@formcontrolname='nominee_address_1']")
-            nom_ad1value = nom_ad1.get_attribute("value")
-            sendkeys(nom_ad1value,nom_ad1,nom_ad1_data)
-            nom_ad2 = xpath("//input[@formcontrolname='nominee_address_2']")
-            nom_ad2value = nom_ad2.get_attribute("value")
-            sendkeys(nom_ad2value, nom_ad2, nom_ad2_data)
-            nom_pincode = xpath("//input[@formcontrolname='nominee_address_pincode']")
-            nom_pincodevalue = nom_pincode.get_attribute("value")
-            sendkeys(nom_pincodevalue, nom_pincode, nom_pincode_data)
-            nom_pincode.click()
-            nom_pincode.send_keys(Keys.ARROW_DOWN)
-            nom_pincode.send_keys(Keys.ENTER)
+                add_drop_down("FATHR", nom_rel)
+            nom_add_same=xpath('//input[@formcontrolname="nominee_applicant_address_same"]')
+            nom_add_samevalue=nom_add_same.get_attribute('checked')
+            print(nom_add_samevalue)
+            if nom_add_samevalue!='true':
+                nom_ad1 = xpath("//input[@formcontrolname='nominee_address_1']")
+                nom_ad1value = nom_ad1.get_attribute("value")
+                sendkeys(nom_ad1value, nom_ad1, nom_ad1_data)
+                nom_ad2 = xpath("//input[@formcontrolname='nominee_address_2']")
+                nom_ad2value = nom_ad2.get_attribute("value")
+                sendkeys(nom_ad2value, nom_ad2, nom_ad2_data)
+                nom_pincode = xpath("//input[@formcontrolname='nominee_address_pincode']")
+                nom_pincodevalue = nom_pincode.get_attribute("value")
+                sendkeys(nom_pincodevalue, nom_pincode, nom_pincode_data)
+                Click(nom_pincode)
+                nom_pincode.send_keys(Keys.ARROW_DOWN)
+                nom_pincode.send_keys(Keys.ENTER)
         continue2 = xpath("//button[@class='button button--yellow button--small']")
         continue2.click()
         time.sleep(15)
