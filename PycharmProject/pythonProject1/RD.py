@@ -66,6 +66,12 @@ def add_drop_down(value, elem):
     if(dropdownvalue == ""):
         dropdown.select_by_value(value)
 
+def error_msg():
+    try:
+     if xpath('//span[@class="errMsg"]').is_displayed():
+         print("Error Occured")
+    except:
+        print('Screen sucessfully completed')
 
 dataSheet = pd.read_excel(r'InputFiles\rd_data.xlsx')
 for ind in dataSheet.index:
@@ -74,6 +80,8 @@ for ind in dataSheet.index:
     driver = webdriver.Chrome(options=c)
     driver.get("https://sitsfl.stfc.in/")
     driver.maximize_window()
+    popupclose = ele('modal-close-btn')
+    Click(popupclose)
     element_hover = xpath("//div[@class='head-link'][1]")
     ActionChains(driver).move_to_element(element_hover).perform()
     otp1_data = dataSheet['OTP1'][ind]
@@ -194,8 +202,11 @@ for ind in dataSheet.index:
         # bg.click()
         # terms_cond = xpath('//*[@id="depositer-details"]/form/div/div[3]/div[1]/div[4]/div/div[1]/div/div/label')
         # terms_cond.click()
+        time.sleep(3)
         continue1 = xpath("(//button[@class='button button--yellow'])[1]")
         continue1.click()
+        error_msg()
+
         # to automate the payment gateway (switch to iframe)
         driver.switch_to.frame(xpath("//iframe[@class='razorpay-checkout-frame']"))
         netbanking = xpath("(//div[@class='title svelte-1r0bvhf'])[1]")
@@ -246,6 +257,8 @@ for ind in dataSheet.index:
         # upload_photovalue=upload_photo.get_attribute("value")
         # sendkeys(upload_photovalue,upload_photo,photo_upload_data)
         continue2.click()
+        if error_message=='':
+            print('Error occured in CKYC screen')
         time.sleep(5)
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/bank-information":
         driver.execute_script("window.scrollTo(0,200)")
@@ -276,7 +289,7 @@ for ind in dataSheet.index:
         time.sleep(5)
     if driver.current_url == "https://sitsfl.stfc.in/recurring-deposit-online/additional-details":
         maturity_instruction = xpath("//select[@formcontrolname='inv_maturity_instruction_type']")
-        maturity_instruction.click()
+        # maturity_instruction.click()
         mat_ins("RDCFD")
         occupation = xpath("//select[@formcontrolname='inv_occupation_type']")
         add_drop_down("PROFL", occupation)
@@ -286,14 +299,14 @@ for ind in dataSheet.index:
         marital_status = xpath("//select[@formcontrolname='inv_marital_status']")
         marital_statusvalue=marital_status.get_attribute('disabled')
         if (marital_statusvalue!='true' or marital_statusvalue==''):
-            marital_status.click()
+            # marital_status.click()
             add_drop_down("RDUNM", marital_status)
 
         fd_tenure = xpath("//select[@formcontrolname='deposit_fd_tenure_type']")
-        fd_tenure.click()
+        # fd_tenure.click()
         add_drop_down("36", fd_tenure)
         fd_payout = xpath("//select[@formcontrolname='deposit_fd_payout_type']")
-        fd_payout.click()
+        # fd_payout.click()
         add_drop_down("QTR", fd_payout)
         #     Nominee details
         nom = xpath('//input[@formcontrolname="is_nominee"]')
