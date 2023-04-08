@@ -29,7 +29,7 @@ for ind in excel.index:
     for link in lnks:
         article_link = (link.get_attribute('href'))
         string = 'shriramfinance.in'
-        # print(article_link)
+
         i=0
 
         if string not in article_link:
@@ -38,9 +38,9 @@ for ind in excel.index:
 
             valid_urls[article_url].append(article_link)
 
-            # b = np.array(article_link)
+
             inv_urls = inv_urls+article_link+"\n"
-            # print(article_link)
+
         else:
 
          count=count+1
